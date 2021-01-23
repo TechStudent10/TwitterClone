@@ -1,0 +1,9 @@
+.bodyCenter {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.post {
+	text-align: center;
+}

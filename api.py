@@ -56,7 +56,7 @@ def createPost():
 		'unique_id': key
 	}
 
-	return posts[session['current_user']['username']][key], 201
+	return redirect(url_for("User Views.showPost", user_id=session['current_user']['username'], post_id=key)), 201
 
 @api.route("/getUsers", methods=['POST'])
 def getUsers():

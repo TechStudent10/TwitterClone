@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<!DOCTYPE html>
+	<html>
+		<head>
+			<title>{{post.name}}</title>
+			<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/post.css') }}" />
+		</head>
+		<body class="bodyCenter">
+			<div class="post">
+				<h1>{{post.name}}</h1>
+				<h3>By: <a href="/user/{{post.author}}">{{post.author}}</a></h3>
+				<h3>Body:</h3>
+				<p>
+					{{post.body}}
+				</p>
+			</div>
+		</body>
+	</html>
+{% endblock %}

@@ -43,7 +43,7 @@ def listUserPosts(user_id):
 @user.route("/user/<user_id>/post/<post_id>")
 def showPost(user_id, post_id):
 	try:
-		return requests.post('http://127.0.0.1:5000/api/getPost', {'post_id': post_id, 'user_id': user_id}).json()
+		return render_template("post.html", post=requests.post('http://127.0.0.1:5000/api/getPost', {'post_id': post_id, 'user_id': user_id}).json())
 	except Exception as e:
 		print(e)
 		return "Post doesn't exist."
