@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<!DOCTYPE html>
+	<html>
+		<head>
+			<title>Create a new post</title>
+		</head>
+		<body>
+			<h1>Create a post.</h1>
+			<form method="POST" action="/api/createPost">
+				<h3>Name</h3>
+				<input type="name" name="name" id="name" />
+				<br>
+				<h3>Body</h3>
+				<textarea id="body" name="body" cols="40" rows="5" style="resize: none;"></textarea>
+				<br>
+				<input type="submit" name="submitButton" />
+			</form>
+		</body>
+	</html>
+{% endblock %}

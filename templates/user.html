@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<!DOCTYPE html>
+	<html>
+		<head>
+			<title>@{{user.username}}</title>
+		</head>
+		<body>
+			<h1>{{user.username}}</h1>
+			{% for item in user %}
+				<p>{{item}}: {{user[item]}}</p>
+			{% endfor %}
+			{% if user.user_id == session_id %}
+				<p>Created by: You</p>
+				<a href="/createNewPost">Create a Post here.</a>
+				<br>
+				<a href="/user/{{user.username}}/posts">View Your's Posts</a>
+			{% else %}
+				<p>Created by: {{user.username}}</p>
+				<a href="/user/{{user.username}}/posts">User's Posts</a>
+			{% endif %}
+		</body>
+	</html>
+{% endblock %}
