@@ -7,14 +7,35 @@
 			<title>{{post.name}}</title>
 			<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/post.css') }}" />
 		</head>
-		<body class="bodyCenter">
-			<div class="post">
-				<h1>{{post.name}}</h1>
-				<h3>By: <a href="/user/{{post.author}}">{{post.author}}</a></h3>
-				<h3>Body:</h3>
-				<p>
-					{{post.body}}
-				</p>
+		<body>
+			<div class="bodyCenter">
+				<div class="post">
+					<h1><a href="/user/{{post.author}}/post/{{post.unique_id}}">{{post.name}}</a></h1>
+					<h3>By: <a href="/user/{{post.author}}">{{post.author}}</a></h3>
+					<h3>Body:</h3>
+					<p>
+						{{post.body}}
+					</p>
+				</div>
+			</div>
+			<div class="comments">
+				<div class="insertComment">
+					<h3>Add a comment:</h3>
+					<form method="POST" action="/api/insertComment">
+						<input type="text" name="comment" id="comment" class="comment" />
+						<input type="hidden" name="username" value="{{user_id}}" />
+						<input type="hidden" name="post_id" value="{{post.unique_id}}" />
+						<input type="hidden" name="poster" value="{{author if author else post.author}}">
+						<input type="submit" name="submit" />
+					</form>
+				</div>
+				<br>
+				<div class="commentHistory">
+					<h3>Comments:</h3>
+					{% for comment in comments %}
+						<h4>{{comments[comment].commenter}}: {{comments[comment].comment}}</h4>
+					{% endfor %}
+				</div>
 			</div>
 		</body>
 	</html>

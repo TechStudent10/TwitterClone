@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<!DOCTYPE html>
+	<html>
+		<head>
+			<title>Posts</title>
+			<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/post.css') }}" />
+		</head>
+		<body>
+			<div style="text-align: center; padding: 10px;">
+				{% for postDict in posts %}
+					<div class="post">
+						<h1><a href="/user/{{posts[postDict].author}}/post/{{posts[postDict].unique_id}}">{{posts[postDict].name}}</a></h1>
+						<h3>By: <a href="/user/{{posts[postDict].author}}">{{posts[postDict].author}}</a></h3>
+						<h3>Body:</h3>
+						<p>
+							{{posts[postDict].body}}
+						</p>
+					</div>
+					<br>
+				{% endfor %}
+			</div>
+		</body>
+	</html>
+{% endblock %}

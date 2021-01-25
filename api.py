@@ -3,8 +3,30 @@ from models import User
 import randomCode
 
 api = Blueprint("API Views", __name__)
-users = {}
-posts = {}
+users = {
+	"Post Bot": {
+		"username": "Post Bot",
+		"password": "admin",
+		"user_id": "PostBotAdminLol",
+	}
+}
+posts = {
+	"Post Bot": {
+		"WelcomeToPostBot": {
+			'name': "I am Post Bot.",
+			'author': "Post Bot",
+			'body': "I am Post Bot! I am basically the TwitterClone admin. Please don't comment on any posts!",
+			'comments': {
+				"Comment1": {
+					"unique_id": "Comment1", 
+					"commenter": "Post Bot", 
+					"comment": "Don't comment!"
+				}
+			},
+			'unique_id': "WelcomeToPostBot"
+		}
+	}
+}
 
 def generateSessionKey(length=6):
 	session_key = randomCode.generate(length)
@@ -17,6 +39,12 @@ def signup():
 	username = request.form.get('username')
 	password = request.form.get('password')
 	
+	'''
+	user = User(username=username, password=password)
+	db.session.add(user)
+	db.session.commit()
+	'''
+
 	user = {
 		"username": username,
 		"password": password,
@@ -35,6 +63,16 @@ def login():
 	username = form.get('username')
 	password = form.get('password')
 
+	'''
+	users = User.query.filter_by(username=username, password=password).all()
+	if len(users) <= 0:
+		return "User doesn't exist".
+	else:
+		user = User.query.filter_by(username=username, password=password).first()
+		session['current_user'] = user
+		return redirect(url_for("User Views.userPage", user_id=user.id, session_id=user.id))
+
+	'''
 	if username in users:
 		session['current_user'] = users[username]
 		users[username]['user_id'] = session['session_key']
@@ -53,6 +91,7 @@ def createPost():
 		'name': name,
 		'author': session['current_user']['username'],
 		'body': body,
+		'comments': {},
 		'unique_id': key
 	}
 
@@ -87,4 +126,38 @@ def getPost():
 
 	if post_id in posts[user_id]:
 		return posts[user_id][post_id]
-	return "", 404
+	return {
+		'name': "404: Post Not Found",
+		'author': "Post Bot",
+		'body': "This post was not found. Maybe reload the post. See if it pops up.",
+		'comments': {},
+		'unique_id': "404PostNotFound"
+	}, 404
+
+@api.route("/insertComment", methods=['POST'])
+def insertComment():
+	form = request.form
+
+	post_id = form.get('post_id')
+	username = form.get('username')
+	comment = form.get('comment')
+	poster = form.get('poster')
+
+	if poster in users:
+		if post_id in posts[poster]:
+			code = randomCode.generate()
+			posts[poster][post_id]['comments'][code] = {"unique_id": code, "commenter": username, "comment": comment}
+			return redirect(url_for('User Views.showPost', user_id=username, post_id=post_id, author=poster))
+	return '', 404
+
+@api.route("/getComments", methods=['POST'])
+def getComments():
+	form = request.form
+
+	poster = form.get('poster')
+	post_id = form.get('post_id')
+
+	if poster in users:
+		if post_id in posts[poster]:
+			return posts[poster][post_id]['comments']
+	return {"unique_id": "PostNotFound", "commenter": "Post Bot", "comment": "Comment Error"}

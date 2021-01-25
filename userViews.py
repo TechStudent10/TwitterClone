@@ -35,15 +35,36 @@ def createNewPost():
 
 @user.route("/user/<user_id>/posts")
 def listUserPosts(user_id):
+	'''
 	try:
-		return requests.post('http://127.0.0.1:5000/api/getPosts', {'user_id': user_id}).json()
-	except Exception:
+		return render_template("posts.html", posts=requests.post('http://127.0.0.1:5000/api/getPosts', {'user_id': user_id}).json())
+	except Exception as e:
+		print(e)
 		return "This user has no posts."
+	'''
+	return render_template("posts.html", posts=requests.post('http://127.0.0.1:5000/api/getPosts', {'user_id': user_id}).json())
 
 @user.route("/user/<user_id>/post/<post_id>")
 def showPost(user_id, post_id):
 	try:
-		return render_template("post.html", post=requests.post('http://127.0.0.1:5000/api/getPost', {'post_id': post_id, 'user_id': user_id}).json())
+		try:
+			comments = requests.post("http://127.0.0.1:5000/api/getComments", {'poster': user_id, 'post_id': post_id}).json()
+		except Exception as e:
+			comments = {'RandomCode':{'unique_id': 'RandomCode', 'commenter': 'Post Bot', 'comment': "No Comments"}}
+		return render_template("post.html", post=requests.post('http://127.0.0.1:5000/api/getPost', {'post_id': post_id, 'user_id': user_id}).json(), user_id=session['current_user']['username'], comments=comments)
 	except Exception as e:
 		print(e)
-		return "Post doesn't exist."
+	return "Post doesn't exist."
+
+@user.route("/listUsers")
+def listUsers():
+	try:
+		users = requests.post('http://127.0.0.1:5000/api/getUsers').json()
+		for user in users:
+			del users[user]['password']
+			del users[user]['user_id']
+			users[user]['user_url'] = "/user/" + users[user]['username']
+		return users
+	except Exception as e:
+		print(e)
+		return "No Users found."

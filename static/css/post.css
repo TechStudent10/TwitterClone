@@ -6,4 +6,32 @@
 
 .post {
 	text-align: center;
+	background: linear-gradient(rgba(255,0,0,0.5), rgba(0,0,255,0.9));
+	border-radius: 2rem;
+	width: 25rem;
+	padding: 2rem;
+	color: black;
+}
+
+.commentHistory {
+	background: linear-gradient(rgba(255,0,0,0.5), rgba(0,255,0,0.9));
+	border-radius: 10rem;
+	width: 30rem;
+	text-align: center;
+	padding: 1rem;
+	margin: 0 auto;
+}
+
+.insertComment {
+	background: linear-gradient(rgba(255,0,0,0.3), rgba(0,255,0,1));
+	border-radius: 10rem;
+	width: 25rem;
+	text-align: center;
+	padding: 1rem;
+	margin: 0 auto;
+}
+
+.comments {
+	text-align: center;
+	padding: 10px;
 }
